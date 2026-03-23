@@ -1,6 +1,6 @@
 import { TodoItem } from './TodoItem.jsx'
 
-export function TodoList({ items, onDeleteTask }) {
+export function TodoList({ items, onDeleteTask, onEditTask }) {
   return (
     <ul className="todo-list">
       {items.map((todo) => (
@@ -10,6 +10,7 @@ export function TodoList({ items, onDeleteTask }) {
           title={todo.title}
           completed={todo.completed}
           onDelete={onDeleteTask}
+          onEdit={onEditTask}
         />
       ))}
     </ul>
