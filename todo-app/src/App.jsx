@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { TodoList } from './components/TodoList.jsx'
 
 const TODOS = [
@@ -9,6 +10,31 @@ const TODOS = [
 ]
 
 function App() {
+  const [todos, setTodos] = useState(TODOS)
+  const [newTaskTitle, setNewTaskTitle] = useState('')
+
+  function handleAddTask(event) {
+    event.preventDefault()
+
+    const trimmedTitle = newTaskTitle.trim()
+    if (!trimmedTitle) {
+      return
+    }
+
+    const newTodo = {
+      id: Date.now(),
+      title: trimmedTitle,
+      completed: false,
+    }
+
+    setTodos((currentTodos) => [...currentTodos, newTodo])
+    setNewTaskTitle('')
+  }
+
+  function handleDeleteTask(taskId) {
+    setTodos((currentTodos) => currentTodos.filter((todo) => todo.id !== taskId))
+  }
+
   return (
     <div className="app">
       <header className="app-header">
@@ -16,7 +42,20 @@ function App() {
         <p className="app-subtitle">Простий список задач на React + Vite</p>
       </header>
       <main>
-        <TodoList items={TODOS} />
+        <form className="todo-form" onSubmit={handleAddTask}>
+          <input
+            className="todo-input"
+            type="text"
+            value={newTaskTitle}
+            onChange={(event) => setNewTaskTitle(event.target.value)}
+            placeholder="Введіть нову задачу"
+          />
+          <button className="todo-add-button" type="submit">
+            Додати
+          </button>
+        </form>
+
+        <TodoList items={todos} onDeleteTask={handleDeleteTask} />
       </main>
     </div>
   )
